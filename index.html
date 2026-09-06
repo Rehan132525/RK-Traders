@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RK Traders — Sewing Machine Sales &amp; Service, Surandai</title>
+<meta name="description" content="RK Traders, Surandai (Tenkasi) — sewing machine sales, repair, servicing and spare parts since 1998. Chat with us on WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  /* ================= Tokens: mechanism theme (gunmetal + copper + steel) ================= */
+  :root{
+    --ink:#14161A;          /* gunmetal, near-black with a cool cast */
+    --ink-2:#1D2025;        /* lifted panel tone, like brushed steel in shadow */
+    --paper:#ECEEF0;        /* cool machined-metal white */
+    --paper-dim:#9BA5B0;
+    --brass:#C97B3D;        /* copper */
+    --brass-dark:#9C5F2E;
+    --teal:#6E93A8;         /* steel-blue */
+    --teal-dark:#4C7488;
+    --rust:#C2472F;         /* oxidised-rust accent */
+    --line:rgba(201,123,61,0.38);
+    --whatsapp:#25D366;
+    --font-head:'Fraunces', serif;
+    --font-body:'IBM Plex Sans', sans-serif;
+  }
+
+  /* ---- mechanism motion: gear rotation, used by decorative cogs throughout ---- */
+  @keyframes gear-cw{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+  @keyframes gear-ccw{ from{transform:rotate(0deg);} to{transform:rotate(-360deg);} }
+  .gear-deco{
+    position:absolute;
+    pointer-events:none;
+    opacity:0.07;
+    z-index:0;
+  }
+  .gear-deco svg{width:100%; height:100%;}
+  .gear-deco.cw{animation:gear-cw 26s linear infinite;}
+  .gear-deco.ccw{animation:gear-ccw 22s linear infinite;}
+
+  .wheel-spin{transform-origin:300px 150px; animation:gear-cw 7s linear infinite;}
+  .hoop-spin{transform-origin:170px 60px; animation:gear-cw 10s linear infinite;}
+  @keyframes thread-move{ to{stroke-dashoffset:-24;} }
+  .thread-flow{animation:thread-move 1.6s linear infinite;}
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--font-body);
+    color:var(--paper);
+    background:var(--ink);
+    line-height:1.6;
+  }
+  img,svg{max-width:100%;display:block;}
+  a{color:inherit;}
+  h1,h2,h3{
+    font-family:var(--font-head);
+    font-weight:600;
+    margin:0;
+    color:var(--paper);
+  }
+  p{margin:0;}
+  .wrap{
+    max-width:1160px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  .stitch{
+    height:0;
+    border-top:2px dashed var(--brass);
+    opacity:0.5;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation:none !important; transition:none !important;}
+  }
+  :focus-visible{
+    outline:3px solid var(--rust);
+    outline-offset:2px;
+  }
+  ::selection{background:var(--brass); color:var(--ink);}
+
+  /* subtle woven-texture overlay so dark sections don't feel flat */
+  .texture{
+    position:relative;
+    overflow:hidden;
+  }
+  .texture::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(236,238,240,0.025) 0px, rgba(236,238,240,0.025) 1px, transparent 1px, transparent 8px);
+    pointer-events:none;
+  }
+
+  /* ================= Nav ================= */
+  header.site-nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(36,28,21,0.94);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 24px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    text-decoration:none;
+  }
+  .brand-mark{width:36px; height:36px; flex:none;}
+  .brand-name{
+    font-family:var(--font-head);
+    font-size:1.4rem;
+    font-weight:600;
+    line-height:1;
+    color:var(--paper);
+  }
+  .brand-sub{
+    display:block;
+    font-family:var(--font-body);
+    font-size:0.66rem;
+    letter-spacing:0.08em;
+    color:var(--brass);
+    margin-top:3px;
+    font-weight:600;
+  }
+  nav.links{display:flex; gap:26px; align-items:center;}
+  nav.links a{
+    text-decoration:none; color:var(--paper-dim);
+    font-size:0.94rem; font-weight:500;
+    padding:6px 2px; border-bottom:2px solid transparent;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  nav.links a:hover{color:var(--paper); border-color:var(--brass);}
+  .nav-cta{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--whatsapp); color:#fff !important;
+    padding:9px 16px; border-radius:6px;
+    font-weight:600; font-size:0.9rem;
+    text-decoration:none; border-bottom:none !important;
+  }
+  .menu-toggle{
+    display:none; background:none; border:none; color:var(--paper);
+    font-size:1.6rem; cursor:pointer; padding:4px 8px;
+  }
+  @media (max-width:840px){
+    nav.links{
+      position:absolute; top:100%; left:0; right:0;
+      background:var(--ink); flex-direction:column; align-items:flex-start;
+      padding:10px 24px 22px; display:none; border-bottom:1px solid var(--line);
+    }
+    nav.links.open{display:flex;}
+    .menu-toggle{display:block;}
+  }
+
+  /* ================= Hero (diagonal split) ================= */
+  .hero{
+    position:relative;
+    padding:72px 0 108px;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse at 15% 0%, rgba(110,147,168,0.22), transparent 55%),
+      var(--ink);
+  }
+  .hero::after{
+    content:"";
+    position:absolute; right:-10%; top:0; bottom:0; width:60%;
+    background:var(--ink-2);
+    clip-path:polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
+    z-index:0;
+  }
+  .hero .wrap{position:relative; z-index:1; display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center;}
+  .eyebrow-line{display:flex; align-items:center; gap:10px; color:var(--brass); font-size:0.85rem; font-weight:600; margin-bottom:16px;}
+  .eyebrow-line .dash{width:32px; height:2px; background:var(--brass); display:inline-block;}
+  .hero h1{font-size:clamp(2.3rem, 4.6vw, 3.5rem); line-height:1.06; letter-spacing:-0.01em;}
+  .hero h1 em{font-style:italic; color:var(--brass); font-weight:600;}
+  .hero p.lede{margin-top:20px; max-width:46ch; font-size:1.06rem; color:var(--paper-dim);}
+  .hero-ctas{display:flex; gap:14px; margin-top:30px; flex-wrap:wrap;}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:13px 22px; font-weight:600; font-size:0.97rem;
+    text-decoration:none; border-radius:6px; border:2px solid transparent;
+    cursor:pointer; font-family:var(--font-body);
+  }
+  .btn-whatsapp{background:var(--whatsapp); color:#fff;}
+  .btn-whatsapp:hover{background:#1fb955;}
+  .btn-outline{background:transparent; color:var(--paper); border-color:var(--paper-dim);}
+  .btn-outline:hover{border-color:var(--brass); color:var(--brass);}
+
+  .hero-stats{display:flex; gap:26px; margin-top:38px; flex-wrap:wrap;}
+  .hero-stats div{border-left:2px solid var(--brass); padding-left:12px;}
+  .hero-stats strong{display:block; font-family:var(--font-head); font-size:1.6rem; color:var(--paper);}
+  .hero-stats span{font-size:0.78rem; color:var(--paper-dim);}
+
+  .hero-art{position:relative;}
+  .hero-art::before{
+    content:"";
+    position:absolute; inset:-8%;
+    background:radial-gradient(ellipse at 55% 45%, rgba(255,255,255,0.07), transparent 60%);
+    pointer-events:none;
+  }
+  .hero-art img{
+    width:100%; height:auto; display:block;
+    border-radius:14px;
+    border:1px solid var(--line);
+    box-shadow:0 20px 50px rgba(0,0,0,0.45);
+    aspect-ratio:4/3; object-fit:cover;
+  }
+  @media (max-width:900px){
+    .hero{padding-bottom:64px;}
+    .hero::after{display:none;}
+    .hero .wrap{grid-template-columns:1fr;}
+    .hero-art{order:-1; max-width:280px; margin:0 auto;}
+  }
+
+  .hero-reveal{animation:hero-in 0.7s ease both;}
+  .hero-reveal.delay1{animation-delay:0.12s;}
+  .hero-reveal.delay2{animation-delay:0.24s;}
+  @keyframes hero-in{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ================= Section shell ================= */
+  section{padding:76px 0;}
+  .section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:40px; flex-wrap:wrap;}
+  .section-head h2{font-size:clamp(1.7rem, 3vw, 2.35rem);}
+  .section-head p{max-width:44ch; color:var(--paper-dim); font-size:0.98rem;}
+  .kicker{display:flex; align-items:center; gap:10px; color:var(--rust); font-weight:700; font-size:0.82rem; letter-spacing:0.03em; margin-bottom:10px;}
+  .kicker .dash{width:24px; height:2px; background:var(--rust); display:inline-block;}
+  .kicker.teal{color:var(--teal);}
+  .kicker.teal .dash{background:var(--teal);}
+
+  /* ================= Services: bento grid ================= */
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(6, 1fr);
+    gap:16px;
+  }
+  .service-card{
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:26px 24px;
+    display:flex; flex-direction:column; gap:12px;
+    grid-column:span 3;
+  }
+  .service-card.wide{grid-column:span 4;}
+  .service-card.narrow{grid-column:span 2;}
+  @media (max-width:900px){
+    .services-grid{grid-template-columns:1fr 1fr;}
+    .service-card, .service-card.wide, .service-card.narrow{grid-column:span 1;}
+  }
+  @media (max-width:560px){
+    .services-grid{grid-template-columns:1fr;}
+  }
+  .service-card{transition:transform .25s ease, border-color .25s ease;}
+  .service-card:hover{transform:translateY(-4px); border-color:var(--brass);}
+  .service-card .icon{width:36px; height:36px; color:var(--brass); transition:transform .5s ease;}
+  .service-card:hover .icon{transform:rotate(90deg);}
+  .service-card h3{font-size:1.15rem;}
+  .service-card p{font-size:0.92rem; color:var(--paper-dim);}
+  .service-card a.enquire{
+    margin-top:auto; padding-top:12px; font-size:0.85rem; font-weight:600; color:var(--paper);
+    text-decoration:none; border-top:1px dashed var(--line);
+    display:flex; align-items:center; gap:6px;
+  }
+  .service-card a.enquire:hover{color:var(--teal);}
+
+  /* ================= Brands marquee ================= */
+  .brands-band{background:var(--ink-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); overflow:hidden;}
+  .marquee{display:flex; width:max-content; animation:scroll-left 22s linear infinite;}
+  .brands-band:hover .marquee{animation-play-state:paused;}
+  .marquee-set{display:flex; align-items:center; gap:56px; padding:28px 28px;}
+  .marquee-set span{
+    font-family:var(--font-head); font-size:1.4rem; font-weight:600;
+    color:var(--paper-dim); white-space:nowrap;
+  }
+  .marquee-set span.hi{color:var(--brass);}
+  @keyframes scroll-left{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+
+  /* ================= Why / stats ================= */
+  .why-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:start;}
+  .why-list{list-style:none; margin:24px 0 0; padding:0; display:flex; flex-direction:column; gap:20px;}
+  .why-list li{display:flex; gap:14px; align-items:flex-start;}
+  .why-list .num{font-family:var(--font-head); color:var(--brass); font-size:1.15rem; min-width:30px;}
+  .why-list p{color:var(--paper-dim); font-size:0.95rem;}
+  .why-list strong{display:block; color:var(--paper); font-size:1.02rem; margin-bottom:2px;}
+  .stat-card{background:var(--ink-2); border:1px solid var(--line); padding:30px; border-radius:10px;}
+  .stat-card .stat{display:flex; justify-content:space-between; align-items:baseline; padding:14px 0; border-bottom:1px dashed var(--line);}
+  .stat-card .stat:last-child{border-bottom:none;}
+  .stat-card .stat strong{font-family:var(--font-head); font-size:1.55rem; color:var(--brass);}
+  .stat-card .stat span{font-size:0.85rem; color:var(--paper-dim);}
+  @media (max-width:840px){.why-grid{grid-template-columns:1fr;}}
+
+  /* ================= Catalog (with illustrated images) ================= */
+  #products{position:relative; overflow:hidden;}
+  .products-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(240px,1fr));
+    gap:24px;
+  }
+  .product-card{
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .product-card{transition:transform .3s ease, border-color .3s ease;}
+  .product-card:hover{transform:translateY(-5px); border-color:var(--brass);}
+  .product-img{
+    position:relative;
+    background:
+      radial-gradient(circle 3px at 12px 12px, var(--brass) 99%, transparent 100%),
+      radial-gradient(circle 3px at calc(100% - 12px) 12px, var(--brass) 99%, transparent 100%),
+      radial-gradient(circle 3px at 12px calc(100% - 12px), var(--brass) 99%, transparent 100%),
+      radial-gradient(circle 3px at calc(100% - 12px) calc(100% - 12px), var(--brass) 99%, transparent 100%),
+      radial-gradient(ellipse at 50% 30%, rgba(255,255,255,0.09), transparent 62%),
+      radial-gradient(ellipse at 50% 100%, rgba(0,0,0,0.4), transparent 68%),
+      linear-gradient(160deg, rgba(201,123,61,0.12), rgba(110,147,168,0.12));
+    padding:22px;
+    border-bottom:1px dashed var(--line);
+    overflow:hidden;
+  }
+  .product-img img{width:100%; height:150px; object-fit:cover; border-radius:6px; display:block; transition:transform .5s ease;}
+  .product-card:hover .product-img img{transform:scale(1.06);}
+  .product-body{padding:20px 22px 22px; display:flex; flex-direction:column; gap:10px; flex:1;}
+  .product-body .tag{
+    align-self:flex-start; font-size:0.7rem; font-weight:700; letter-spacing:0.05em;
+    color:var(--ink); background:var(--brass); border-radius:20px; padding:3px 10px;
+  }
+  .product-body h3{font-size:1.1rem;}
+  .product-body p{font-size:0.9rem; color:var(--paper-dim);}
+  .product-body a{
+    margin-top:auto; padding-top:8px; font-size:0.85rem; font-weight:600;
+    text-decoration:none; color:var(--paper); display:inline-flex; align-items:center; gap:6px;
+  }
+  .product-body a:hover{color:var(--teal);}
+
+  /* ================= Contact ================= */
+  .contact-section{background:var(--ink-2); border-top:1px solid var(--line);}
+  .contact-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:52px;}
+  .contact-info p{color:var(--paper-dim); margin-top:14px; max-width:40ch;}
+  .info-list{list-style:none; margin:28px 0 0; padding:0; display:flex; flex-direction:column; gap:18px;}
+  .info-list li{display:flex; gap:14px; align-items:flex-start;}
+  .info-list .ic{width:22px; height:22px; flex:none; color:var(--brass); margin-top:2px;}
+  .info-list strong{display:block; font-size:0.95rem;}
+  .info-list span, .info-list a{font-size:0.9rem; color:var(--paper-dim); text-decoration:none;}
+  .info-list a:hover{color:var(--brass);}
+
+  form.enquiry{
+    background:var(--ink);
+    border:1px solid var(--line);
+    padding:30px; border-radius:10px;
+    display:flex; flex-direction:column; gap:16px;
+  }
+  form.enquiry .field{display:flex; flex-direction:column; gap:6px;}
+  form.enquiry label{font-size:0.82rem; font-weight:600; color:var(--brass);}
+  form.enquiry input, form.enquiry select, form.enquiry textarea{
+    font-family:var(--font-body); font-size:0.95rem; padding:11px 12px;
+    border:1px solid var(--line); border-radius:6px;
+    background:var(--ink-2); color:var(--paper);
+  }
+  form.enquiry input::placeholder, form.enquiry textarea::placeholder{color:var(--paper-dim);}
+  form.enquiry input:focus, form.enquiry select:focus, form.enquiry textarea:focus{border-color:var(--teal);}
+  form.enquiry textarea{resize:vertical; min-height:88px;}
+  form.enquiry .row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:520px){form.enquiry .row2{grid-template-columns:1fr;}}
+  form.enquiry button{justify-content:center; margin-top:4px;}
+  form.enquiry .hint{font-size:0.78rem; color:var(--paper-dim);}
+  @media (max-width:900px){.contact-grid{grid-template-columns:1fr;}}
+
+  /* ================= Footer ================= */
+  footer{background:var(--ink); border-top:1px solid var(--line); color:var(--paper-dim); padding:30px 0 84px; font-size:0.85rem;}
+  footer .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;}
+  footer a{color:var(--paper-dim); text-decoration:none;}
+  footer a:hover{color:var(--brass);}
+  @media (min-width:641px){footer{padding-bottom:30px;}}
+
+  /* ================= Floating WhatsApp ================= */
+  .wa-float{
+    position:fixed; right:20px; bottom:20px; z-index:60;
+    width:58px; height:58px; border-radius:50%;
+    background:var(--whatsapp); display:flex; align-items:center; justify-content:center;
+    box-shadow:0 8px 20px rgba(0,0,0,0.4); text-decoration:none;
+    animation:wa-pop 0.5s ease 1.2s both;
+  }
+  .wa-float::after{
+    content:"";
+    position:absolute; inset:0; border-radius:50%;
+    border:2px solid var(--whatsapp);
+    animation:wa-ring 2.4s ease-out 2s infinite;
+  }
+  .wa-float svg{width:30px; height:30px;}
+  @keyframes wa-pop{from{transform:scale(0); opacity:0;} to{transform:scale(1); opacity:1;}}
+  @keyframes wa-ring{
+    0%{transform:scale(1); opacity:0.6;}
+    100%{transform:scale(1.7); opacity:0;}
+  }
+
+  /* ================= Mobile sticky call bar ================= */
+  .mobile-bar{
+    display:none;
+    position:fixed; left:0; right:0; bottom:0; z-index:59;
+    background:var(--ink-2); border-top:1px solid var(--line);
+    padding:10px 16px; gap:10px;
+  }
+  @media (max-width:640px){
+    .mobile-bar{display:flex;}
+    .wa-float{bottom:78px;}
+  }
+  .mobile-bar a{
+    flex:1; text-align:center; padding:11px 0; border-radius:6px;
+    font-weight:600; font-size:0.88rem; text-decoration:none;
+  }
+  .mobile-bar .call{background:transparent; border:1.5px solid var(--brass); color:var(--brass);}
+  .mobile-bar .wa{background:var(--whatsapp); color:#fff;}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="site-nav">
+  <div class="wrap nav-row">
+    <a class="brand" href="#top">
+      <svg class="brand-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="22" stroke="#C97B3D" stroke-width="2"/>
+        <path class="thread-flow" d="M14 30 C 18 22, 22 34, 26 24 S 34 16, 34 16" stroke="#ECEEF0" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-dasharray="1 5.5"/>
+        <circle cx="34" cy="16" r="2.2" fill="#6E93A8"/>
+      </svg>
+      <span>
+        <span class="brand-name">RK Traders</span>
+        <span class="brand-sub">SEWING MACHINE SALES &amp; SERVICE &middot; SURANDAI</span>
+      </span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">&#9776;</button>
+    <nav class="links" id="navLinks">
+      <a href="#services">Services</a>
+      <a href="#brands">Brands</a>
+      <a href="#products">Catalog</a>
+      <a href="#why">Why Us</a>
+      <a href="#contact">Contact</a>
+      <a class="nav-cta" href="#" id="navWaBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C10.3 9 9.8 7.8 9.6 7.3c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.3-.1-.2-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.6 1.4 5.2L2 22l4.9-1.3c1.5.8 3.2 1.3 5.1 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.7 0-3.3-.5-4.6-1.3l-.3-.2-3.3.9.9-3.2-.2-.3C3.7 14.5 3.2 13 3.2 12c0-4.8 3.9-8.7 8.8-8.7s8.8 3.9 8.8 8.7-3.9 8.7-8.8 8.7z"/></svg>
+        Chat on WhatsApp
+      </a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="gear-deco cw" style="width:340px; height:340px; top:-90px; right:-70px; color:var(--brass);" aria-hidden="true">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="50" r="30"/><circle cx="50" cy="50" r="10"/><g stroke-width="6"><line x1="50" y1="6" x2="50" y2="20"/><line x1="50" y1="80" x2="50" y2="94"/><line x1="6" y1="50" x2="20" y2="50"/><line x1="80" y1="50" x2="94" y2="50"/><line x1="18" y1="18" x2="28" y2="28"/><line x1="72" y1="72" x2="82" y2="82"/><line x1="82" y1="18" x2="72" y2="28"/><line x1="28" y1="72" x2="18" y2="82"/></g></svg>
+  </div>
+  <div class="gear-deco ccw" style="width:160px; height:160px; bottom:-40px; left:-30px; color:var(--teal);" aria-hidden="true">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="50" r="30"/><circle cx="50" cy="50" r="10"/><g stroke-width="6"><line x1="50" y1="6" x2="50" y2="20"/><line x1="50" y1="80" x2="50" y2="94"/><line x1="6" y1="50" x2="20" y2="50"/><line x1="80" y1="50" x2="94" y2="50"/><line x1="18" y1="18" x2="28" y2="28"/><line x1="72" y1="72" x2="82" y2="82"/><line x1="82" y1="18" x2="72" y2="28"/><line x1="28" y1="72" x2="18" y2="82"/></g></svg>
+  </div>
+  <div class="wrap">
+    <div>
+      <div class="eyebrow-line hero-reveal"><span class="dash"></span>Since 1996 &middot; Surandai, Tenkasi District</div>
+      <h1 class="hero-reveal delay1">Machines that <em>never miss a stitch.</em></h1>
+      <p class="lede hero-reveal delay2">RK Traders sells and services domestic and industrial sewing machines — Usha, Singer, Brother, Juki and Merritt — with genuine parts and quick turnaround, right here in Surandai.</p>
+      <div class="hero-ctas hero-reveal delay2">
+        <a href="#" class="btn btn-whatsapp" id="heroWaBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C10.3 9 9.8 7.8 9.6 7.3c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.3-.1-.2-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.6 1.4 5.2L2 22l4.9-1.3c1.5.8 3.2 1.3 5.1 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.7 0-3.3-.5-4.6-1.3l-.3-.2-3.3.9.9-3.2-.2-.3C3.7 14.5 3.2 13 3.2 12c0-4.8 3.9-8.7 8.8-8.7s8.8 3.9 8.8 8.7-3.9 8.7-8.8 8.7z"/></svg>
+          Get a Quote on WhatsApp
+        </a>
+        <a href="tel:+917708609812" class="btn btn-outline">Call the Shop</a>
+      </div>
+      <div class="hero-stats hero-reveal delay2">
+        <div><strong>30</strong><span>years in Surandai</span></div>
+        <div><strong>6,000+</strong><span>machines serviced</span></div>
+        <div><strong>24 hr</strong><span>typical turnaround</span></div>
+      </div>
+    </div>
+    <div class="hero-art hero-reveal delay1" aria-hidden="true">
+      <img src="https://images.pexels.com/photos/4614221/pexels-photo-4614221.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200" alt="Sewing machine needle and thread close-up" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES (bento) ============ -->
+<section id="services" class="texture">
+  <div class="gear-deco cw" style="width:220px; height:220px; top:-60px; right:6%; color:var(--brass);" aria-hidden="true">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="50" r="30"/><circle cx="50" cy="50" r="10"/><g stroke-width="6"><line x1="50" y1="6" x2="50" y2="20"/><line x1="50" y1="80" x2="50" y2="94"/><line x1="6" y1="50" x2="20" y2="50"/><line x1="80" y1="50" x2="94" y2="50"/><line x1="18" y1="18" x2="28" y2="28"/><line x1="72" y1="72" x2="82" y2="82"/><line x1="82" y1="18" x2="72" y2="28"/><line x1="28" y1="72" x2="18" y2="82"/></g></svg>
+  </div>
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="kicker"><span class="dash"></span>What we do</div>
+        <h2>Sales, repair &amp; parts, under one roof</h2>
+      </div>
+      <p>From a jammed bobbin to a full industrial line setup — tell us the machine and the problem on WhatsApp, and we'll take it from there.</p>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card wide">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20 L20 4 M14 4 h6 v6 M4 14 v6 h6"/></svg>
+        <h3>New Machine Sales</h3>
+        <p>Domestic, tailoring and industrial machines from Usha, Singer, Brother, Juki and Merritt, with demo and setup included at your shop or home.</p>
+        <a class="enquire" href="#" data-wa-msg="Hi RK Traders, I'd like to buy a sewing machine. Can you share the current models and prices?">Ask about models &rarr;</a>
+      </div>
+      <div class="service-card narrow">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4.7a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.3a7 7 0 0 0-2 1.2l-2.4-.7-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-.7a7 7 0 0 0 2 1.2L10 21h4l.5-2.3a7 7 0 0 0 2-1.2l2.4.7 2-3.4-2-1.6c.1-.4.1-.8.1-1.2Z"/></svg>
+        <h3>Repair &amp; Servicing</h3>
+        <p>Motor rewinding, tension and timing correction, oiling.</p>
+        <a class="enquire" href="#" data-wa-msg="Hi RK Traders, my sewing machine needs a repair. Can I book a service?">Book a repair &rarr;</a>
+      </div>
+      <div class="service-card narrow">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="6" width="16" height="12" rx="1"/><path d="M4 10 h16 M9 14 h2 M13 14 h2"/></svg>
+        <h3>Spare Parts</h3>
+        <p>Needles, bobbins, belts, motors and foot pedals, in stock.</p>
+        <a class="enquire" href="#" data-wa-msg="Hi RK Traders, I need a spare part for my sewing machine. Can you check stock?">Check stock &rarr;</a>
+      </div>
+      <div class="service-card wide">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4 v16 h16"/><path d="M8 15 l3-4 3 3 4-6"/></svg>
+        <h3>Annual Maintenance Contracts</h3>
+        <p>AMC plans for tailoring units and small factories — scheduled visits, priority breakdown support, discounted parts.</p>
+        <a class="enquire" href="#" data-wa-msg="Hi RK Traders, I'm interested in an Annual Maintenance Contract (AMC) for our machines.">Ask about AMC &rarr;</a>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7 l9-4 9 4-9 4-9-4Z"/><path d="M3 7 v10 l9 4 9-4V7"/></svg>
+        <h3>Old Machine Exchange</h3>
+        <p>Trade in your old machine towards a new or refurbished one — fair valuation, on the spot.</p>
+        <a class="enquire" href="#" data-wa-msg="Hi RK Traders, I want to exchange my old sewing machine for a new one. What's the process?">Get a valuation &rarr;</a>
+      </div>
+      <div class="service-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3 v18 M3 12 h18"/><circle cx="12" cy="12" r="9"/></svg>
+        <h3>Embroidery &amp; Overlock</h3>
+        <p>Sales and repair for tailoring and garment units nearby.</p>
+        <a class="enquire" href="#" data-wa-msg="Hi RK Traders, I have a query about embroidery/overlock machines.">Ask a question &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BRANDS (marquee) ============ -->
+<section class="brands-band" id="brands">
+  <div class="wrap" style="padding-top:20px;">
+    <div class="kicker teal"><span class="dash"></span>Brands we service</div>
+  </div>
+  <div class="marquee">
+    <div class="marquee-set">
+      <span class="hi">Usha</span><span>Singer</span><span class="hi">Brother</span><span>Juki</span><span class="hi">Merritt</span><span>Jack</span><span>Everest</span>
+    </div>
+    <div class="marquee-set" aria-hidden="true">
+      <span class="hi">Usha</span><span>Singer</span><span class="hi">Brother</span><span>Juki</span><span class="hi">Merritt</span><span>Jack</span><span>Everest</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY US ============ -->
+<section id="why" class="texture">
+  <div class="gear-deco ccw" style="width:260px; height:260px; bottom:-70px; left:-50px; color:var(--teal);" aria-hidden="true">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="50" r="30"/><circle cx="50" cy="50" r="10"/><g stroke-width="6"><line x1="50" y1="6" x2="50" y2="20"/><line x1="50" y1="80" x2="50" y2="94"/><line x1="6" y1="50" x2="20" y2="50"/><line x1="80" y1="50" x2="94" y2="50"/><line x1="18" y1="18" x2="28" y2="28"/><line x1="72" y1="72" x2="82" y2="82"/><line x1="82" y1="18" x2="72" y2="28"/><line x1="28" y1="72" x2="18" y2="82"/></g></svg>
+  </div>
+  <div class="wrap why-grid">
+    <div>
+      <div class="kicker"><span class="dash"></span>Why RK Traders</div>
+      <h2>28 years of keeping Surandai's machines running</h2>
+      <ul class="why-list">
+        <li><span class="num">01</span><p><strong>Trained technicians</strong>Every repair is handled by technicians trained on both mechanical and computerised machines, not general electricians.</p></li>
+        <li><span class="num">02</span><p><strong>Genuine parts only</strong>We fit manufacturer-approved parts, and we'll tell you plainly if a part isn't worth replacing.</p></li>
+        <li><span class="num">03</span><p><strong>Doorstep pickup</strong>Industrial machines and bulk tailoring units too heavy to move — our team collects and returns them.</p></li>
+        <li><span class="num">04</span><p><strong>Straight pricing over WhatsApp</strong>Send a photo or voice note of the problem and get an estimate before you commit to a visit.</p></li>
+      </ul>
+    </div>
+    <div class="stat-card">
+      <div class="stat"><span>Years serving Surandai</span><strong>30</strong></div>
+      <div class="stat"><span>Machines sold &amp; serviced</span><strong>6,000+</strong></div>
+      <div class="stat"><span>Brands supported</span><strong>6</strong></div>
+      <div class="stat"><span>Average repair turnaround</span><strong>24 hrs</strong></div>
+      <div class="stat"><span>Doorstep visits per month</span><strong>120+</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CATALOG (illustrated cards) ============ -->
+<section id="products">
+  <div class="gear-deco cw" style="width:200px; height:200px; top:20px; left:-60px; color:var(--brass);" aria-hidden="true">
+    <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="50" r="30"/><circle cx="50" cy="50" r="10"/><g stroke-width="6"><line x1="50" y1="6" x2="50" y2="20"/><line x1="50" y1="80" x2="50" y2="94"/><line x1="6" y1="50" x2="20" y2="50"/><line x1="80" y1="50" x2="94" y2="50"/><line x1="18" y1="18" x2="28" y2="28"/><line x1="72" y1="72" x2="82" y2="82"/><line x1="82" y1="18" x2="72" y2="28"/><line x1="28" y1="72" x2="18" y2="82"/></g></svg>
+  </div>
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="kicker teal"><span class="dash"></span>Catalog</div>
+        <h2>Find the right machine for the job</h2>
+      </div>
+      <p>Prices and stock change often — message us the category and we'll send current options with photos.</p>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card">
+        <div class="product-img">
+          <img src="https://images.pexels.com/photos/3984836/pexels-photo-3984836.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Domestic sewing machine in use" loading="lazy">
+        </div>
+        <div class="product-body">
+          <span class="tag">DOMESTIC</span>
+          <h3>Home &amp; Tailoring</h3>
+          <p>Straight-stitch and multi-stitch machines for home use and small tailoring setups.</p>
+          <a href="#" data-wa-msg="Hi RK Traders, I'd like to see domestic sewing machine options.">Enquire &rarr;</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img">
+          <img src="https://images.pexels.com/photos/5894261/pexels-photo-5894261.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Industrial sewing machine mechanism close-up" loading="lazy">
+        </div>
+        <div class="product-body">
+          <span class="tag">INDUSTRIAL</span>
+          <h3>Industrial Single-Needle</h3>
+          <p>High-speed lockstitch machines built for garment units and daily heavy use.</p>
+          <a href="#" data-wa-msg="Hi RK Traders, I'd like details on industrial single-needle machines.">Enquire &rarr;</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img">
+          <img src="https://images.pexels.com/photos/6660925/pexels-photo-6660925.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Overlock sewing machine mechanism with thread" loading="lazy">
+        </div>
+        <div class="product-body">
+          <span class="tag">OVERLOCK</span>
+          <h3>Overlock &amp; Interlock</h3>
+          <p>2, 4 and 5-thread overlock machines for edging, hemming and seam finishing.</p>
+          <a href="#" data-wa-msg="Hi RK Traders, I'd like details on overlock/interlock machines.">Enquire &rarr;</a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img">
+          <img src="https://images.pexels.com/photos/33952439/pexels-photo-33952439.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Sewing machine with embroidery thread" loading="lazy">
+        </div>
+        <div class="product-body">
+          <span class="tag">EMBROIDERY</span>
+          <h3>Embroidery Machines</h3>
+          <p>Single and multi-head embroidery machines for boutiques and small units.</p>
+          <a href="#" data-wa-msg="Hi RK Traders, I'd like details on embroidery machines.">Enquire &rarr;</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact-section" id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-info">
+      <div class="kicker"><span class="dash"></span>Get in touch</div>
+      <h2>Visit, call, or just send a WhatsApp message</h2>
+      <p>Most enquiries are answered fastest on WhatsApp — send a photo of the machine or the part you need and we'll reply with pricing.</p>
+      <ul class="info-list">
+        <li>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <div><strong>Shop Address</strong><span>A.S.A.R.A Complex, Bus Stand West Side, Surandai, Tenkasi District, Tamil Nadu – 627859</span></div>
+        </li>
+        <li>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8.1 9.6a16 16 0 0 0 6 6l1.1-1.2a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z"/></svg>
+          <div><strong>Phone / WhatsApp</strong><a href="tel:+917708609812">+91 77086 09812</a></div>
+        </li>
+        <li>
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <div><strong>Shop Hours</strong><span>Mon–Sat, 9:30 AM – 9:00 PM &middot; Sunday closed</span></div>
+        </li>
+      </ul>
+    </div>
+
+    <form class="enquiry" id="enquiryForm">
+      <div class="field">
+        <label for="name">Your name</label>
+        <input type="text" id="name" name="name" placeholder="e.g. Priya Kumar" required>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="phone">Phone number</label>
+          <input type="tel" id="phone" name="phone" placeholder="10-digit mobile" required>
+        </div>
+        <div class="field">
+          <label for="service">I need help with</label>
+          <select id="service" name="service">
+            <option>Buying a new machine</option>
+            <option>Repair / servicing</option>
+            <option>Spare parts</option>
+            <option>AMC for my unit</option>
+            <option>Old machine exchange</option>
+            <option>Something else</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="message">Tell us a bit more</label>
+        <textarea id="message" name="message" placeholder="Machine brand, model, or the problem you're facing..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-whatsapp">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C10.3 9 9.8 7.8 9.6 7.3c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.3-.1-.2-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.6 1.4 5.2L2 22l4.9-1.3c1.5.8 3.2 1.3 5.1 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.7 0-3.3-.5-4.6-1.3l-.3-.2-3.3.9.9-3.2-.2-.3C3.7 14.5 3.2 13 3.2 12c0-4.8 3.9-8.7 8.8-8.7s8.8 3.9 8.8 8.7-3.9 8.7-8.8 8.7z"/></svg>
+        Send via WhatsApp
+      </button>
+      <p class="hint">This opens WhatsApp with your details filled in — nothing is stored on our website.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <span>&copy; <span id="year"></span> RK Traders, Surandai. All rights reserved.</span>
+    <a href="#top">Back to top &uarr;</a>
+  </div>
+</footer>
+
+<!-- ============ FLOATING WHATSAPP ============ -->
+<a href="#" class="wa-float" id="floatWaBtn" aria-label="Chat with RK Traders on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="#fff"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.5.1-.2 0-.4 0-.5C10.3 9 9.8 7.8 9.6 7.3c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.3-.1-.2-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.6 1.4 5.2L2 22l4.9-1.3c1.5.8 3.2 1.3 5.1 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.7 0-3.3-.5-4.6-1.3l-.3-.2-3.3.9.9-3.2-.2-.3C3.7 14.5 3.2 13 3.2 12c0-4.8 3.9-8.7 8.8-8.7s8.8 3.9 8.8 8.7-3.9 8.7-8.8 8.7z"/></svg>
+</a>
+
+<!-- ============ MOBILE STICKY BAR ============ -->
+<div class="mobile-bar">
+  <a href="tel:+917708609812" class="call">Call Shop</a>
+  <a href="#" class="wa" id="mobileWaBtn">WhatsApp</a>
+</div>
+
+<script>
+  // ======================================================
+  // WhatsApp number — already set to RK Traders' number.
+  // Format: country code + number, no + sign, no spaces.
+  // ======================================================
+  const WHATSAPP_NUMBER = "917708609812";
+  const DEFAULT_MESSAGE = "Hi RK Traders, I'd like to know more about your sewing machines and services.";
+
+  function waLink(message){
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  }
+
+  function bindWhatsappLinks(){
+    document.querySelectorAll('[data-wa-msg]').forEach(el=>{
+      el.setAttribute('href', waLink(el.getAttribute('data-wa-msg')));
+      el.setAttribute('target', '_blank');
+      el.setAttribute('rel', 'noopener');
+    });
+    ['navWaBtn','heroWaBtn','floatWaBtn','mobileWaBtn'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el){
+        el.setAttribute('href', waLink(DEFAULT_MESSAGE));
+        el.setAttribute('target', '_blank');
+        el.setAttribute('rel', 'noopener');
+      }
+    });
+  }
+  bindWhatsappLinks();
+
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  menuToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', isOpen);
+  });
+  navLinks.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click', ()=> navLinks.classList.remove('open'));
+  });
+
+  const form = document.getElementById('enquiryForm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const service = document.getElementById('service').value;
+    const message = document.getElementById('message').value.trim();
+
+    let text = `Hi RK Traders, my name is ${name} (${phone}).\nI need help with: ${service}.`;
+    if(message){ text += `\nDetails: ${message}`; }
+
+    window.open(waLink(text), '_blank', 'noopener');
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
